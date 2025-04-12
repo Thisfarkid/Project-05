@@ -3,12 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Unity.AI.Navigation;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class MazeGenerator : MonoBehaviour
 {
     public GameObject[] tiles;
+
+    public GameObject player;
+   
 
     const int N = 1;
     const int E = 2;
@@ -36,6 +40,9 @@ public class MazeGenerator : MonoBehaviour
         cell_walls[new Vector2(-1, 0)] = W;
 
         MakeMaze();
+
+        GameObject p = GameObject.Instantiate(player);
+        p.transform.position = new Vector3(2.91f, 1f, 4.9f);
     }
 
     private List<Vector2> CheckNeighbors(Vector2 cell, List<Vector2> unvisited) {
@@ -114,7 +121,8 @@ public class MazeGenerator : MonoBehaviour
                 tile.transform.parent = gameObject.transform;
 
                 tile.transform.Translate(new Vector3 (j*tile_size, 0, i * tile_size));
-                tile.name += " " + i.ToString() + ' ' + j.ToString(); 
+                tile.name += " " + i.ToString() + ' ' + j.ToString();
+                tile.GetComponentInChildren<NavMeshSurface>().BuildNavMesh();
                
             }
 
